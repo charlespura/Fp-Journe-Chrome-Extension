@@ -1,4 +1,5 @@
 # F.P. Journe Chrome Extension
+<img width="800" height="500" alt="Screenshot 2026-03-18 at 12 48 15 PM" src="https://github.com/user-attachments/assets/e4491232-57f3-4e9e-b77c-53fa0b66bf89" />
 
 A beautiful, interactive Chrome extension featuring an F.P. Journe-inspired mechanical watch with titanium fingers that display the hour through hand gestures and a sweeping red minute hand.
 
