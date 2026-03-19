@@ -53,107 +53,97 @@
             }
         }
 
-        function setFingersForHour(hour24, minutes) {
-            // More accurate hour calculation including minutes
-            // Convert 24h to 12h format and add minute-based adjustment
-            let exactHour = hour24 % 12;
-            if (exactHour === 0) exactHour = 12;
-            
-            // Add minute-based adjustment (each minute moves the hour hand 0.5 degrees)
-            // But since we have discrete finger positions, we round to nearest hour
-            // Only change the finger position when we're closer to the next hour
-            const minuteProgress = minutes / 60;
-            
-            // Determine which hour position to show based on time
-            // This makes the hand change at the right moment
-            let displayHour = exactHour;
-            
-            // If we're past 45 minutes, start showing the next hour's gesture
-            if (minuteProgress > 0.75) {
-                // Show next hour's gesture (but wrap around 12)
-                displayHour = exactHour === 12 ? 1 : exactHour + 1;
-            }
-            
-            // Hide all fingers first
-            Object.values(fingers).forEach(f => {
-                if (f) f.classList.add('hidden-finger');
-            });
+    function setFingersForHour(hour24, minutes) {
+    // Convert 24h to 12h format
+    let exactHour = hour24 % 12;
+    if (exactHour === 0) exactHour = 12;
+    
+    // Only change the hour display when we're actually at the next hour
+    // For F.P. Journe FFC, the fingers change exactly on the hour, not gradually
+    let displayHour = exactHour;
+    
+    // If we're past 59 minutes and 30 seconds, we could optionally show next hour
+    // But for accuracy, let's keep it strictly on the hour change
+    // You could adjust this threshold if you want it to change closer to the hour
+    
+    // Hide all fingers first
+    Object.values(fingers).forEach(f => {
+        if (f) f.classList.add('hidden-finger');
+    });
 
-            // Show fingers based on the display hour
-            switch (displayHour) {
-                case 1: 
-                    fingers.index?.classList.remove('hidden-finger'); 
-                    break;
-                case 2: 
-                    fingers.index?.classList.remove('hidden-finger'); 
-                    fingers.middle?.classList.remove('hidden-finger'); 
-                    break;
-                case 3: 
-                    fingers.index?.classList.remove('hidden-finger'); 
-                    fingers.middle?.classList.remove('hidden-finger'); 
-                    fingers.ring?.classList.remove('hidden-finger'); 
-                    break;
-                case 4: 
-                    fingers.index?.classList.remove('hidden-finger'); 
-                    fingers.middle?.classList.remove('hidden-finger'); 
-                    fingers.ring?.classList.remove('hidden-finger'); 
-                    fingers.pinky?.classList.remove('hidden-finger'); 
-                    break;
-                case 5: 
-                    fingers.thumb?.classList.remove('hidden-finger');
-                    fingers.index?.classList.remove('hidden-finger');
-                    fingers.middle?.classList.remove('hidden-finger');
-                    fingers.ring?.classList.remove('hidden-finger');
-                    fingers.pinky?.classList.remove('hidden-finger');
-                    break;
-                case 6: 
-                    fingers.thumb?.classList.remove('hidden-finger'); 
-                    break;
-                case 7: 
-                    fingers.thumb?.classList.remove('hidden-finger'); 
-                    fingers.index?.classList.remove('hidden-finger'); 
-                    break;
-                case 8: 
-                    fingers.thumb?.classList.remove('hidden-finger'); 
-                    fingers.index?.classList.remove('hidden-finger'); 
-                    fingers.middle?.classList.remove('hidden-finger'); 
-                    break;
-                case 9: 
-                    fingers.thumb?.classList.remove('hidden-finger'); 
-                    fingers.index?.classList.remove('hidden-finger'); 
-                    fingers.middle?.classList.remove('hidden-finger'); 
-                    fingers.ring?.classList.remove('hidden-finger'); 
-                    break;
-                case 10:
-                    fingers.index?.classList.remove('hidden-finger');
-                    fingers.middle?.classList.remove('hidden-finger');
-                    fingers.ring?.classList.remove('hidden-finger');
-                    fingers.pinky?.classList.remove('hidden-finger');
-                    break;
-                case 11: 
-                    fingers.pinky?.classList.remove('hidden-finger'); 
-                    break;
-                case 12: 
-                    fingers.thumb?.classList.remove('hidden-finger'); 
-                    fingers.pinky?.classList.remove('hidden-finger'); 
-                    break;
-                default: 
-                    break;
-            }
+    // Show fingers based on the display hour
+    switch (displayHour) {
+        case 1: 
+            fingers.index?.classList.remove('hidden-finger'); 
+            break;
+        case 2: 
+            fingers.index?.classList.remove('hidden-finger'); 
+            fingers.middle?.classList.remove('hidden-finger'); 
+            break;
+        case 3: 
+            fingers.index?.classList.remove('hidden-finger'); 
+            fingers.middle?.classList.remove('hidden-finger'); 
+            fingers.ring?.classList.remove('hidden-finger'); 
+            break;
+        case 4: 
+            fingers.index?.classList.remove('hidden-finger'); 
+            fingers.middle?.classList.remove('hidden-finger'); 
+            fingers.ring?.classList.remove('hidden-finger'); 
+            fingers.pinky?.classList.remove('hidden-finger'); 
+            break;
+        case 5: 
+            fingers.thumb?.classList.remove('hidden-finger');
+            fingers.index?.classList.remove('hidden-finger');
+            fingers.middle?.classList.remove('hidden-finger');
+            fingers.ring?.classList.remove('hidden-finger');
+            fingers.pinky?.classList.remove('hidden-finger');
+            break;
+        case 6: 
+            fingers.thumb?.classList.remove('hidden-finger'); 
+            break;
+        case 7: 
+            fingers.thumb?.classList.remove('hidden-finger'); 
+            fingers.index?.classList.remove('hidden-finger'); 
+            break;
+        case 8: 
+            fingers.thumb?.classList.remove('hidden-finger'); 
+            fingers.index?.classList.remove('hidden-finger'); 
+            fingers.middle?.classList.remove('hidden-finger'); 
+            break;
+        case 9: 
+            fingers.thumb?.classList.remove('hidden-finger'); 
+            fingers.index?.classList.remove('hidden-finger'); 
+            fingers.middle?.classList.remove('hidden-finger'); 
+            fingers.ring?.classList.remove('hidden-finger'); 
+            break;
+        case 10:
+            fingers.index?.classList.remove('hidden-finger');
+            fingers.middle?.classList.remove('hidden-finger');
+            fingers.ring?.classList.remove('hidden-finger');
+            fingers.pinky?.classList.remove('hidden-finger');
+            break;
+        case 11: 
+            fingers.pinky?.classList.remove('hidden-finger'); 
+            break;
+        case 12: 
+            fingers.thumb?.classList.remove('hidden-finger'); 
+            fingers.pinky?.classList.remove('hidden-finger'); 
+            break;
+        default: 
+            break;
+    }
 
-            // Update gesture name with more context
-            const names = {
-                1:'index', 2:'victory', 3:'three', 4:'four', 5:'open hand',
-                6:'thumb', 7:'thumb+index', 8:'thumb+two', 9:'thumb+three',
-                10:'four no thumb', 11:'pinky', 12:'thumb+pinky'
-            };
-            
-            // Show both actual hour and display hour for debugging
-            if (gestureSpan) {
-                gestureSpan.innerText = `${names[displayHour] || 'ffc'} · ${displayHour}`;
-            }
-        }
-
+    // Update gesture name
+    const names = {
+        1:'index', 2:'victory', 3:'three', 4:'four', 5:'open hand',
+        6:'thumb', 7:'thumb+index', 8:'thumb+two', 9:'thumb+three',
+        10:'four no thumb', 11:'pinky', 12:'thumb+pinky'
+    };
+    
+    if (gestureSpan) {
+        gestureSpan.innerText = `${names[displayHour] || 'ffc'} · ${displayHour}`;
+    }
+}
         function updateWatch() {
             const now = new Date();
             
